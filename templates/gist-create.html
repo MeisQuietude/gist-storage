@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block title %}Create Gist{% endblock %}
+{% block links %}
+    <link rel="stylesheet" href="/static/css/form-create-gist.css">
+{% endblock %}
+
+{% block content %}
+
+    <h1>Share your code</h1>
+
+    <form action="/" method="post">
+
+        <input type="text" maxlength="255" id="description" name="description"
+               placeholder="Gist description...">
+
+        <section id="gists">
+
+            <section class="gist">
+                <input type="text" maxlength="80" class="filename" name="filename"
+                       placeholder="Filename including extension...">
+
+                <input type="button" class="delBtn" value="Delete this fragment">
+
+                <textarea name="code" class="code"></textarea>
+
+                <section class="additional-ways-enter-code">
+                    <input type="button" value="External link">
+                    <input type="button" value="Upload file">
+                </section>
+            </section>
+
+        </section>
+
+        <section class="form-action">
+            <input type="button" id="addBtn" value="Append new fragment">
+            <input type="submit" value="Create secret gist">
+            <input type="submit" value="Create public gist">
+        </section>
+    </form>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/js/gist-create.js"></script>
+{% endblock %}

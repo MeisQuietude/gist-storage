@@ -1,6 +1,11 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #b4b4ac;
 }
 
 header {
@@ -9,10 +14,12 @@ header {
   background-color: #24292E;
 }
 
-section.content {
+main {
   width: 100vw;
   height: 90vh;
-  background-color: #b4b4ac;
+  text-align: center;
+  padding: 0 20vw;
+  overflow-x: hidden;
 }
 
 /*# sourceMappingURL=layout.css.map */
