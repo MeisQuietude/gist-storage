@@ -4,14 +4,29 @@
   margin: 0
   padding: 0
   box-sizing: border-box
+  text-decoration: none
+  list-style: none
 
 body
   background-color: $background_color
+  font-family: $font
+  font-size: $font-size
+
 
 header
   width: 100%
   height: $header_height
   background-color: $header_color
+
+  nav
+    padding: $header_height / 4
+    margin-left: 50px
+    ul
+      display: flex
+      li
+        margin-right: 25px
+        a
+          color: $link-color
 
 main
   width: 100vw

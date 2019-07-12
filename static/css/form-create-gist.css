@@ -21,6 +21,10 @@ textarea.code {
   height: 40vh;
 }
 
+.head-wrap {
+  margin: 25px 0;
+}
+
 .gist {
   display: flex;
   flex-direction: column;
@@ -28,6 +32,7 @@ textarea.code {
 
 .additional-ways-enter-code, .form-action {
   display: flex;
+  margin-bottom: 15px;
 }
 .additional-ways-enter-code > input, .form-action > input {
   flex-grow: 1;
