@@ -1,22 +1,36 @@
 {% extends 'layout.html' %}
 
 {% block title %} Gist {% endblock %}
+{% block links %}
+    <link rel="stylesheet" href="../../static/css/gist-description.css">
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+{% endblock %}
+{% block scripts %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
 
 {% block content %}
-    <h1>Gist</h1>
 
-    <section>
+    <section class="head-wrap">
+        <h1>Gist</h1>
+    </section>
+
+    <section class="description">
         <h3>Description</h3>
         <p>{{ description if description else "no description" }}</p>
     </section>
 
-    <section>
+    <section class="code">
         <h3>Code</h3>
         <section class="snippets">
             {% for filename in gists.keys() %}
-                <section class="snippets">
+                <section class="snippet">
                     <h4>{{ filename }}</h4>
-                    <section>{{ gists.get(filename, None) }}</section>
+                    <section>
+                        <pre><code>{{ gists.get(filename).get("code_snippet", None) }}</code></pre>
+                    </section>
                 </section>
             {% endfor %}
         </section>
