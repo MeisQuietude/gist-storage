@@ -1,12 +1,24 @@
 from flask import Flask, render_template, request
+from werkzeug.datastructures import ImmutableMultiDict
 
 app = Flask(__name__)
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('gist/create.html')
+    if request.method == 'GET':
+        return render_template('gist/create.html')
+
+    assert request.method == 'POST'
+    form: ImmutableMultiDict = request.form
+
+    description: str = form.get('description', None)
+    filenames: list = form.getlist('filename', str)
+    code_snippets: list = form.getlist('code', str)
+
+    gists: dict = dict(zip(filenames, code_snippets))
+
+    return render_template('gist/description.html', description=description, gists=gists)
 
 
 @app.route('/discover')
@@ -23,7 +35,7 @@ def gist(id):
     if request.method == 'POST':
         pass
     else:
-        pass
+        return render_template('gist/description.html')
 
 
 if __name__ == '__main__':

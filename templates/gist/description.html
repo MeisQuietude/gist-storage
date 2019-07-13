@@ -13,7 +13,12 @@
     <section>
         <h3>Code</h3>
         <section class="snippets">
-            <section class="snippet"></section>
+            {% for filename in gists.keys() %}
+                <section class="snippets">
+                    <h4>{{ filename }}</h4>
+                    <section>{{ gists.get(filename, None) }}</section>
+                </section>
+            {% endfor %}
         </section>
     </section>
 
