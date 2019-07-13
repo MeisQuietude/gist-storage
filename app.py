@@ -46,7 +46,7 @@ def index():
         matched = pattern.match(first_line)
 
         if matched is None: continue
-        languages[i] = matched.group(0).split('/')[-1].title()
+        languages[i] = "Python"
 
     languages = list(map(lambda l: l if l is not None else "Unknown language", languages))
 
@@ -63,8 +63,8 @@ def _get_supported_language_by_ext(ext: str) -> str or None:
     Supported languages: JS, Python, C++, PHP, HTML
     """
     lang = None
-    supported_exts = ('.js', '.py', '.cpp', '.myphp', '.html')
-    supported_langs = ('JavaScript', 'Python', 'C++', 'PHP', 'HTML')
+    supported_exts = ('.js', '.py', '.cpp', '.myphp', '.java')
+    supported_langs = ('JavaScript', 'Python', 'C++', 'PHP', 'Java')
     lang = dict(zip(supported_exts, supported_langs)).get(ext.lower(), None)
     return lang
 
