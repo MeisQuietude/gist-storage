@@ -27,7 +27,7 @@
         <section class="snippets">
             {% for filename in gists.keys() %}
                 <section class="snippet">
-                    <h4>{{ filename }}</h4>
+                    <h4>{{ filename }}, language: {{ gists.get(filename).get("language", None) }}</h4>
                     <section>
                         <pre><code>{{ gists.get(filename).get("code_snippet", None) }}</code></pre>
                     </section>
