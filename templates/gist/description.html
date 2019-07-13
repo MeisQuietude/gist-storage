@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block title %} Gist {% endblock %}
+
+{% block content %}
+    <h1>Gist</h1>
+
+    <section>
+        <h3>Description</h3>
+        <p>{{ description if description else "no description" }}</p>
+    </section>
+
+    <section>
+        <h3>Code</h3>
+        <section class="snippets">
+            <section class="snippet"></section>
+        </section>
+    </section>
+
+
+{% endblock %}
