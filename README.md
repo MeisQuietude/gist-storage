@@ -10,3 +10,4 @@ The web application like gist.github.com, that is allowing you to store and shar
     - Jinja2
 - CSS
     - SASS
+- PostgreSQL 10
