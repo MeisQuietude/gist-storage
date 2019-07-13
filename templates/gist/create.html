@@ -14,17 +14,17 @@
     <form action="/" method="post">
 
         <input type="text" maxlength="255" id="description" name="description"
-               placeholder="Gist description...">
+               placeholder="Gist description..." required>
 
         <section id="gists">
 
             <section class="gist">
                 <input type="text" maxlength="80" class="filename" name="filename"
-                       placeholder="Filename including extension...">
+                       placeholder="Filename including extension..." required>
 
                 <input type="button" class="delBtn" value="Delete this fragment">
 
-                <textarea name="code" class="code"></textarea>
+                <textarea name="code" class="code" required></textarea>
 
                 <section class="additional-ways-enter-code">
                     <input type="button" value="External link">
