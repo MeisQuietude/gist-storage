@@ -72,7 +72,7 @@ def index():
         if matched is None: continue
         languages[i] = "Python"
 
-    languages = list(map(lambda l: l if l is not None else "Unknown language", languages))
+    languages = list(map(lambda l: l if l is not None else "Unknown", languages))
 
     gists: dict = {}
     for i in range(len(filenames)):
