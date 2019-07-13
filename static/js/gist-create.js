@@ -1,5 +1,5 @@
 const gists = document.querySelector('#gists');
-const gist = document.querySelector('.gist');
+const gist = document.querySelector('.gist').cloneNode(true);
 
 const addBtn = document.querySelector('#addBtn');
 addBtn.onclick = () => {
