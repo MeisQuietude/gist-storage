@@ -60,7 +60,7 @@ def index():
 
 def _get_supported_language_by_ext(ext: str) -> str or None:
     """
-    Supported languages: JS, Python, C++, PHP, HTML
+    Supported languages: JS, Python, C++, PHP, Java
     """
     lang = None
     supported_exts = ('.js', '.py', '.cpp', '.myphp', '.java')
