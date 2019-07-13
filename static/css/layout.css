@@ -39,4 +39,9 @@ main {
   overflow-x: hidden;
 }
 
+.head-wrap {
+  margin: 25px 0;
+  text-transform: uppercase;
+}
+
 /*# sourceMappingURL=layout.css.map */

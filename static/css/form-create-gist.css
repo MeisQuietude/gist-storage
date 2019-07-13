@@ -14,15 +14,12 @@ input[type=button] {
   height: 5vh;
 }
 
-textarea.code {
+textarea {
+  text-align: left;
   resize: none;
   overflow: auto;
   white-space: nowrap;
   height: 40vh;
-}
-
-.head-wrap {
-  margin: 25px 0;
 }
 
 .gist {
