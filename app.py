@@ -7,17 +7,18 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from werkzeug.datastructures import ImmutableMultiDict
 
-from config import SQLALCHEMY_DATABASE_URL
+from config import POSTGRES_DATABASE_URL, APP_DEBUG
 
 db = SQLAlchemy()
 
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URL
+    app.config['SQLALCHEMY_DATABASE_URI'] = POSTGRES_DATABASE_URL
+    app.debug = APP_DEBUG
     db.init_app(app)
 
-    engine = create_engine(SQLALCHEMY_DATABASE_URL)
+    engine = create_engine(POSTGRES_DATABASE_URL)
     if not database_exists(engine.url):
         create_database(engine.url)
     with app.app_context():
