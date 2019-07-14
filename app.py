@@ -1,7 +1,7 @@
 import os
 import re
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
@@ -15,34 +15,36 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = POSTGRES_DATABASE_URL
-    app.debug = APP_DEBUG
     db.init_app(app)
 
     engine = create_engine(POSTGRES_DATABASE_URL)
     if not database_exists(engine.url):
         create_database(engine.url)
     with app.app_context():
-        from model import Gist, Snippet
         db.create_all()
         db.session.commit()
 
     return app
 
 
+from model import Gist, Snippet
+
 app = create_app()
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
-    if request.method == 'GET':
-        return render_template('gist/create.html')
+    return render_template('gist/create.html')
 
-    assert request.method == 'POST'
+
+@app.route('/post/gist', methods=['POST'])
+def post_gist():
     form: ImmutableMultiDict = request.form
 
-    description: str = form.get('description', None).strip()
-    if description is None:
+    description: str = form.get('description', '').strip()
+    if not description:
         return render_template('gist/create.html', error="Gist's description can't be empty")
+    is_public: bool = bool(int(form.get('public', 0)))
 
     filenames: list = form.getlist('filename', str)
     languages: list = []
@@ -67,20 +69,28 @@ def index():
         snippet = code_snippets[i]
         first_line = snippet.split('\n')[0]
 
-        pattern = re.compile(r"#! ?[/\S]+ ?[python]")
+        pattern = re.compile(r"#! ?[/\S]+ ?[python]")  # shebang for python (it's only one supported and use shebang)
         matched = pattern.match(first_line)
 
         if matched is None: continue
         languages[i] = "Python"
 
-    languages = list(map(lambda l: l if l is not None else "Unknown", languages))
+    gist = Gist(description, is_public)
 
-    gists: dict = {}
     for i in range(len(filenames)):
-        gists[filenames[i]] = {"language": languages[i],
-                               "code_snippet": code_snippets[i]}
+        snippet = Snippet(gist.id_, filenames[i], languages[i], code_snippets[i], i)
+        gist.snippets.append(snippet)
 
-    return render_template('gist/description.html', description=description, gists=gists)
+    db.session.add(gist)
+    db.session.commit()
+
+    return redirect(url_for('gist_description', link=gist.link))
+
+
+@app.route('/gist/<link>')
+def gist_description(link):
+    gist = get_gist_api(link)
+    return render_template('gist/description.html', gist=gist)
 
 
 def _get_supported_language_by_ext(ext: str) -> str or None:
@@ -99,17 +109,42 @@ def discover():
     return render_template('gist/list.html')
 
 
-@app.route('/gist/<id>', methods=['GET', 'POST'])
-def gist(id):
+# @app.route('/api/gist/<id_>')
+def get_gist_api(id_=None) -> Gist or None:
     """
-    GET: looking for page of gist
-    POST: create new one gist
+    :param id_: id_ (len:32), public link (len:8), private link (len:24)
+    :return object (type 'Gist') or None
     """
-    if request.method == 'POST':
-        pass
-    else:
-        return render_template('gist/description.html')
+    try:
+        assert id_ is not None
 
+        id_length = len(id_)
+        if id_length == 32:
+            # Full id\link ( developer case )
+            result = Gist.query.filter(Gist.id_ == id_).first()
+        elif id_length == 24:
+            # Private link
+            result = Gist.query.filter(Gist.id_.endswith(id_)).first()
+        elif id_length == 8:
+            # Public link
+            result = Gist.query.filter(Gist.id_.startswith(id_)).first()
+        else:
+            result = None
+
+        assert result is not None
+
+        return jsonify(result)
+
+    except AssertionError:
+        return {"error": "Gist was not found"}
+
+
+with app.test_request_context():
+    print('Test start')
+    g = get_gist_api('4486ba99')
+    print(g)
+    print(g.snippets)
+    print('Test end')
 
 if __name__ == '__main__':
     app.run()
