@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}Discover{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="../../static/css/gist-list.css">
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+{% endblock %}
+
+{% block scripts %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
+
+{% block content %}
+    {% if not gists %}
+        <section class="gists-wrap">
+            <h2>There is no gists yet</h2>
+        </section>
+    {% else %}
+        <section class="gists-wrap">
+            <section class="gists">
+                {% for gist in gists %}
+                    <section class="gist">
+                        <section class="description">
+                            <span>{{ gist.description }}</span>
+                        </section>
+                        <section>
+                            <section class="filename"><p>{{ gist.snippets[0].filename }}</p></section>
+                            <section>
+                                <pre><code>{{ get_preview(gist.snippets[0].code) }}</code></pre>
+                            </section>
+                        </section>
+                        <section><a href="/gist/{{ gist.link }}">view</a></section>
+                    </section>
+                {% endfor %}
+            </section>
+        </section>
+    {% endif %}
+{% endblock %}
