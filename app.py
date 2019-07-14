@@ -90,6 +90,8 @@ def post_gist():
 @app.route('/gist/<link>')
 def gist_description(link):
     gist = get_gist_api(link)
+    if gist is None:
+        return render_template('gist/description.html', error={"error": "gist not exists"})
     return render_template('gist/description.html', gist=gist)
 
 
@@ -133,18 +135,11 @@ def get_gist_api(id_=None) -> Gist or None:
 
         assert result is not None
 
-        return jsonify(result)
+        return result
 
     except AssertionError:
-        return {"error": "Gist was not found"}
+        return None
 
-
-with app.test_request_context():
-    print('Test start')
-    g = get_gist_api('4486ba99')
-    print(g)
-    print(g.snippets)
-    print('Test end')
 
 if __name__ == '__main__':
     app.run()
