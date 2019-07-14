@@ -3,7 +3,7 @@ import uuid
 from app import db
 
 
-class DB_Tools:
+class _Tools:
     @staticmethod
     def gen_id():
         """
@@ -35,8 +35,8 @@ class Gist(db.Model):
     def __init__(self, description, is_public=False):
         self.description = description
         self.is_public = is_public
-        self.id_ = DB_Tools.gen_id()
-        self.link = DB_Tools.make_link(self.id_, self.is_public)
+        self.id_ = _Tools.gen_id()
+        self.link = _Tools.make_link(self.id_, self.is_public)
 
     def __repr__(self):
         return f'Gist {self.id_}'
@@ -57,7 +57,7 @@ class Snippet(db.Model):
     col_names = ('id_', 'gist_id', 'filename', 'language', 'code', 'order', 'gist')
 
     def __init__(self, gist_id, filename, language, code, order):
-        self.id_ = DB_Tools.gen_id()
+        self.id_ = _Tools.gen_id()
         self.gist_id = gist_id
         self.filename = filename
         self.language = language
