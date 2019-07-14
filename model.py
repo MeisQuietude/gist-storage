@@ -36,9 +36,10 @@ class Gist(db.Model):
 
 class Snippet(db.Model):
     id_ = db.Column(db.Integer, primary_key=True)
-    gist_id = db.Column(db.Integer, db.ForeignKey('gist.id_'), nullable=False)
     language = db.Column(db.String(80), nullable=True)
     code = db.Column(db.Text)
+    gist_id = db.Column(db.Integer, db.ForeignKey('gist.id_'), nullable=False)
+    gist = db.relationship('Gist')
 
     # For __repr__
     columns = ('id_', 'gist_id', 'language', 'code')
