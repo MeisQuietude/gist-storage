@@ -1,0 +1,24 @@
+.gists-wrap {
+  margin-top: 25px;
+}
+
+.gist {
+  border: 2px black solid;
+  border-top: none;
+  margin-top: 35px;
+}
+
+.description {
+  border-bottom: 2px black solid;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  background-color: #484848;
+  color: white;
+}
+
+.filename > * {
+  text-align: left;
+  font-style: italic;
+}
+
+/*# sourceMappingURL=gist-list.css.map */

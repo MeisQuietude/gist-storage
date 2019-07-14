@@ -39,6 +39,11 @@ main {
   overflow-x: hidden;
 }
 
+code {
+  text-align: left;
+  font-size: 0.7em;
+}
+
 .head-wrap {
   margin: 25px 0;
   text-transform: uppercase;
