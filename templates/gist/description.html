@@ -17,19 +17,23 @@
         <h1>Gist</h1>
     </section>
 
+    <section class="gist-access">
+        <span>{{ "public" if gist.is_public else "private" }}</span>
+    </section>
+
     <section class="description">
         <h3>Description</h3>
-        <p>{{ description if description else "no description" }}</p>
+        <p>{{ gist.descriprion }}</p>
     </section>
 
     <section class="code">
         <h3>Code</h3>
         <section class="snippets">
-            {% for filename in gists.keys() %}
+            {% for snippet in gist.snippets %}
                 <section class="snippet">
-                    <h4>{{ filename }}, language: {{ gists.get(filename).get("language", None) }}</h4>
+                    <h4>{{ snippet.filename }}, language: {{ snippet.language }}</h4>
                     <section>
-                        <pre><code>{{ gists.get(filename).get("code_snippet", None) }}</code></pre>
+                        <pre><code>{{ snippet.code }}</code></pre>
                     </section>
                 </section>
             {% endfor %}
