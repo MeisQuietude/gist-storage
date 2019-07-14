@@ -11,7 +11,7 @@
         <h1>Share your code</h1>
     </section>
 
-    <form action="/" method="post">
+    <form action="/post/gist" method="post">
 
         <input type="text" maxlength="255" id="description" name="description"
                placeholder="Gist description..." required>
@@ -36,8 +36,8 @@
 
         <section class="form-action">
             <input type="button" id="addBtn" value="Append new fragment">
-            <input type="submit" value="Create secret gist">
-            <input type="submit" value="Create public gist">
+            <button type="submit" name="public" value="0">Create secret gist</button>
+            <button type="submit" name="public" value="1">Create public gist</button>
         </section>
     </form>
 
