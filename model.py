@@ -24,16 +24,13 @@ class DB_Tools:
 
 
 class Gist(db.Model):
-    id_ = db.Column(db.String(), primary_key=True)
+    id_ = db.Column(db.String(32), primary_key=True)
     description = db.Column(db.String(255), nullable=False)
     is_public = db.Column(db.Boolean)
     link = db.Column(db.String(80), unique=True)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    snippets = db.relationship('Snippet', backref="gist", lazy="dynamic")
 
-    # For __repr__
-    columns = ('id_', 'description', 'is_public', 'link', 'created_at')
-    values = (id_, description, is_public, link, created_at)
+    col_names = ('id_', 'description', 'is_public', 'link', 'created_at')
 
     def __init__(self, description, is_public=False):
         self.description = description
@@ -44,19 +41,20 @@ class Gist(db.Model):
     def __repr__(self):
         return f'Gist {self.id_}'
 
+    def get_col_names(self):
+        return self.col_names
+
 
 class Snippet(db.Model):
-    id_ = db.Column(db.Integer, primary_key=True)
+    id_ = db.Column(db.String(32), primary_key=True)
     filename = db.Column(db.String(80), nullable=False)
     language = db.Column(db.String(80), nullable=True)
     code = db.Column(db.Text)
     order = db.Column(db.Integer, default=0)
-    gist_id = db.Column(db.Integer, db.ForeignKey('gist.id_'), nullable=False)
-    gist = db.relationship('Gist')
+    gist_id = db.Column(db.String(32), db.ForeignKey('gist.id_'), nullable=False)
+    gist = db.relationship('Gist', backref=db.backref('snippets', lazy=True))
 
-    # For __repr__
-    columns = ('id_', 'gist_id', 'language', 'code')
-    values = (id_, gist_id, language, code)
+    col_names = ('id_', 'gist_id', 'filename', 'language', 'code', 'order', 'gist')
 
     def __init__(self, gist_id, filename, language, code, order):
         self.id_ = DB_Tools.gen_id()
@@ -68,3 +66,6 @@ class Snippet(db.Model):
 
     def __repr__(self):
         return f'Snippet {self.id_}'
+
+    def get_col_names(self):
+        return self.col_names
