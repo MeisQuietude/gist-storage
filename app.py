@@ -1,13 +1,13 @@
 import os
 import re
 
-from flask import Flask, render_template, request, url_for, redirect, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, url_for, redirect
+from flask_sqlalchemy import SQLAlchemy, BaseQuery
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 from werkzeug.datastructures import ImmutableMultiDict
 
-from config import POSTGRES_DATABASE_URL, APP_DEBUG
+from config import POSTGRES_DATABASE_URL, MAX_NUMBER_LINES_PREVIEW, MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW
 
 db = SQLAlchemy()
 
@@ -108,7 +108,8 @@ def _get_supported_language_by_ext(ext: str) -> str or None:
 
 @app.route('/discover')
 def discover():
-    return render_template('gist/list.html')
+    gists = get_all_gists_api()
+    return render_template('gist/list.html', gists=gists, get_preview=get_preview_from_code)
 
 
 # @app.route('/api/gist/<id_>')
@@ -145,8 +146,20 @@ def get_all_gists_api():
     """
     :return: Gists or None
     """
-    gists = Gist.query.filter(Gist.is_public)
-    return gists
+    gists: BaseQuery = Gist.query.filter(Gist.is_public)
+    return gists.all()
+
+
+def get_preview_from_code(code: str):
+    lines = code.split('\n')
+    if len(lines) > MAX_NUMBER_LINES_PREVIEW:
+        lines = lines[:MAX_NUMBER_LINES_PREVIEW]
+        lines.append('...')
+    return '\n'.join(map(
+        lambda line:
+        line if len(line) <= MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW
+        else line[:MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW - 3] + '...',
+        lines))
 
 
 if __name__ == '__main__':
