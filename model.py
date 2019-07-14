@@ -58,9 +58,10 @@ class Snippet(db.Model):
     columns = ('id_', 'gist_id', 'language', 'code')
     values = (id_, gist_id, language, code)
 
-    def __init__(self, gist_id, language, code, order):
+    def __init__(self, gist_id, filename, language, code, order):
         self.id_ = DB_Tools.gen_id()
         self.gist_id = gist_id
+        self.filename = filename
         self.language = language
         self.code = code
         self.order = order
