@@ -31,7 +31,7 @@ textarea {
   display: flex;
   margin-bottom: 15px;
 }
-.additional-ways-enter-code > input, .form-action > input {
+.additional-ways-enter-code > input, .additional-ways-enter-code button, .form-action > input, .form-action button {
   flex-grow: 1;
 }
 
