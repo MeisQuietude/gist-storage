@@ -15,9 +15,10 @@ class DB_Tools:
 
 class Gist(db.Model):
     id_ = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(255))
+    description = db.Column(db.String(255), nullable=False)
     is_private = db.Column(db.Boolean)
-    link = db.Column(db.String(80))
+    link = db.Column(db.String(80), unique=True)
+    snippets = db.relationship('Snippet', backref="gist", lazy="dynamic")
 
     # For __repr__
     columns = ('id_', 'description', 'is_private', 'link')
@@ -38,9 +39,9 @@ class Gist(db.Model):
 
 class Snippet(db.Model):
     id_ = db.Column(db.Integer, primary_key=True)
-    gist_id = db.Column(db.Integer)
-    language = db.Column(db.String(80))
-    code = db.Column(db.String)
+    gist_id = db.Column(db.Integer, db.ForeignKey('gist.id_'), nullable=False)
+    language = db.Column(db.String(80), nullable=True)
+    code = db.Column(db.Text)
 
     # For __repr__
     columns = ('id_', 'gist_id', 'language', 'code')
