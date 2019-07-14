@@ -115,7 +115,7 @@ def discover():
 def get_gist_api(id_=None) -> Gist or None:
     """
     :param id_: id_ (len:32), public link (len:8), private link (len:24)
-    :return object (type 'Gist') or None
+    :return: object (type 'Gist') or None
     """
     try:
         assert id_ is not None
@@ -139,6 +139,14 @@ def get_gist_api(id_=None) -> Gist or None:
 
     except AssertionError:
         return None
+
+
+def get_all_gists_api():
+    """
+    :return: Gists or None
+    """
+    gists = Gist.query.filter(Gist.is_public)
+    return gists
 
 
 if __name__ == '__main__':
