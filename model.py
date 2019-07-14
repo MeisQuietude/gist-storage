@@ -31,10 +31,7 @@ class Gist(db.Model):
         self.link = DB_Tools.make_link()
 
     def __repr__(self):
-        """
-        :return: dict {"column_name": column_value}
-        """
-        return {k: v for k, v in zip(self.columns, self.values)}
+        return f'Gist {self.id_}'
 
 
 class Snippet(db.Model):
@@ -54,7 +51,4 @@ class Snippet(db.Model):
         self.code = code
 
     def __repr__(self):
-        """
-        :return: dict {"column_name": column_value}
-        """
-        return {k: v for k, v in zip(self.columns, self.values)}
+        return f'Snippet {self.id_}'
