@@ -4,6 +4,10 @@
 {% block links %}
     <link rel="stylesheet" href="/static/css/form-create-gist.css">
 {% endblock %}
+{% block scripts %}
+    <script src="/static/js/gist-create.js"></script>
+    <script src="../../static/js/upload-file.js"></script>
+{% endblock %}
 
 {% block content %}
 
@@ -28,7 +32,7 @@
 
                 <section class="additional-ways-enter-code">
                     <input type="button" value="External link">
-                    <input type="button" value="Upload file">
+                    <input type="file" value="Upload file">
                 </section>
             </section>
 
@@ -43,6 +47,3 @@
 
 {% endblock %}
 
-{% block scripts %}
-    <script src="/static/js/gist-create.js"></script>
-{% endblock %}
