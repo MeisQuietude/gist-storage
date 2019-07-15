@@ -44,11 +44,17 @@
         <section class="page_numbers">
             <ul>
                 <li><a data-nav="prev">&#8249;</a></li>
-                {% for i in range(1, info.get('number_pages', 0)) %}
-                    <li><a href="/discover/{{ i }}">{{ i }}</a></li>
+                <li><a href="/discover/1">1</a></li>
+                {% for i in info.get('page_numbers') %}
+                    <li>
+                        {% if i != "..." %}
+                            <a href="/discover/{{ i }}">{{ i }}</a>
+                        {% else %}
+                            <p>{{ i }}</p>
+                        {% endif %}
+                    </li>
                 {% endfor %}
-                <li><a href="/discover/{{ info.get('number_pages', 0) }}"
-                       data-nav="last">{{ info.get('number_pages', 0) }}</a></li>
+                <li><a href="/discover/{{ info.get('last_page') }}" data-nav="last">{{ info.get('last_page') }}</a></li>
                 <li><a data-nav="next">&#8250;</a></li>
             </ul>
         </section>
