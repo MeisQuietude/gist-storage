@@ -21,4 +21,13 @@
   font-style: italic;
 }
 
+.page_numbers > ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.page_numbers > ul > li {
+  margin-right: 10px;
+}
+
 /*# sourceMappingURL=gist-list.css.map */
