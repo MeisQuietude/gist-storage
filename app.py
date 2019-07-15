@@ -110,12 +110,13 @@ def _get_supported_language_by_ext(ext: str) -> str or None:
 @app.route('/discover/')
 @app.route('/discover/<int:page>')
 def discover(page=1):
-    if page < 0: page = 1
     info = {
         "number_pages": AdvancedTool.get_number_pages(get_gists_by_page(0)),
         "get_preview": AdvancedTool.get_preview_from_code
     }
-    if page > info.get("number_pages", 0): page = info.get("number_pages", 1)
+    if page > info.get("number_pages", 0):
+        page = info.get("number_pages", 1)
+        return redirect(url_for('discover', page=page))
 
     gists = get_gists_by_page(page)
     return render_template('gist/list.html', info=info, gists=gists)
@@ -167,8 +168,6 @@ def get_gists_by_page(i: int = 0, number_gist_on_page: int = NUMBER_GISTS_ON_PAG
         end = start + number_gist_on_page
         gists = Gist.query.filter(Gist.is_public).order_by(desc(Gist.created_at)).slice(start, end).all()
     return gists
-
-
 
 
 if __name__ == '__main__':
