@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="../../static/js/gist-list.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 {% endblock %}
@@ -29,13 +30,27 @@
                         <section>
                             <section class="filename"><p>{{ gist.snippets[0].filename }}</p></section>
                             <section>
-                                <pre><code>{{ get_preview(gist.snippets[0].code) }}</code></pre>
+                                <pre><code>{{ info.get("get_preview")(gist.snippets[0].code) }}</code></pre>
                             </section>
+                        </section>
+                        <section>
+                            <p>{{ gist.created_at }}</p>
                         </section>
                         <section><a href="/gist/{{ gist.link }}">view</a></section>
                     </section>
                 {% endfor %}
             </section>
+        </section>
+        <section class="page_numbers">
+            <ul>
+                <li><a data-nav="prev">&#8249;</a></li>
+                {% for i in range(1, info.get('number_pages', 0)) %}
+                    <li><a href="/discover/{{ i }}">{{ i }}</a></li>
+                {% endfor %}
+                <li><a href="/discover/{{ info.get('number_pages', 0) }}"
+                       data-nav="last">{{ info.get('number_pages', 0) }}</a></li>
+                <li><a data-nav="next">&#8250;</a></li>
+            </ul>
         </section>
     {% endif %}
 {% endblock %}
