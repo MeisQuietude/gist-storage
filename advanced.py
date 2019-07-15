@@ -1,11 +1,12 @@
 from math import ceil
 
-from config import NUMBER_GISTS_ON_PAGE, MAX_NUMBER_LINES_PREVIEW, MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW
+from config import NUMBER_GISTS_ON_PAGE, MAX_NUMBER_LINES_PREVIEW, MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW, \
+    COUNT_VIEW_PAGE_NUMBERS
 
 
 class AdvancedTool:
     @staticmethod
-    def get_number_pages(all_gists):
+    def get_last_page_number(all_gists):
         return ceil(len(all_gists) / NUMBER_GISTS_ON_PAGE)
 
     @staticmethod
@@ -19,3 +20,13 @@ class AdvancedTool:
             line if len(line) <= MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW
             else line[:MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW - 3] + '...',
             lines))
+
+    @staticmethod
+    def get_page_numbers(i, last_page, count=COUNT_VIEW_PAGE_NUMBERS):
+        numbers = []
+        if i > count:
+            numbers.append('...')
+        numbers = [*numbers, *[page for page in range(i - count, i + count + 1) if 1 < page < last_page]]
+        if last_page - i > count:
+            numbers.append('...')
+        return numbers
