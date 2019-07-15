@@ -2,12 +2,13 @@ import os
 import re
 
 from flask import Flask, render_template, request, url_for, redirect
-from flask_sqlalchemy import SQLAlchemy, BaseQuery
-from sqlalchemy import create_engine
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, desc
 from sqlalchemy_utils import database_exists, create_database
 from werkzeug.datastructures import ImmutableMultiDict
 
-from config import POSTGRES_DATABASE_URL, MAX_NUMBER_LINES_PREVIEW, MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW
+from advanced import AdvancedTool
+from config import POSTGRES_DATABASE_URL, NUMBER_GISTS_ON_PAGE
 
 db = SQLAlchemy()
 
@@ -106,10 +107,18 @@ def _get_supported_language_by_ext(ext: str) -> str or None:
     return lang
 
 
-@app.route('/discover')
-def discover():
-    gists = get_all_gists_api()
-    return render_template('gist/list.html', gists=gists, get_preview=get_preview_from_code)
+@app.route('/discover/')
+@app.route('/discover/<int:page>')
+def discover(page=1):
+    if page < 0: page = 1
+    info = {
+        "number_pages": AdvancedTool.get_number_pages(get_gists_by_page(0)),
+        "get_preview": AdvancedTool.get_preview_from_code
+    }
+    if page > info.get("number_pages", 0): page = info.get("number_pages", 1)
+
+    gists = get_gists_by_page(page)
+    return render_template('gist/list.html', info=info, gists=gists)
 
 
 # @app.route('/api/gist/<id_>')
@@ -142,24 +151,24 @@ def get_gist_api(id_=None) -> Gist or None:
         return None
 
 
-def get_all_gists_api():
+def get_gists_by_page(i: int = 0, number_gist_on_page: int = NUMBER_GISTS_ON_PAGE):
     """
-    :return: Gists or None
+    :param i: number of page: 1 to N (0 for all)
+    :param number_gist_on_page: maximum gists by page
+    :return: list or None
     """
-    gists: BaseQuery = Gist.query.filter(Gist.is_public)
-    return gists.all()
+    if i < 0: i = 0
+    gists = None
+    if i == 0:
+        gists = Gist.query.filter(Gist.is_public).order_by(desc(Gist.created_at)).all()
+    else:
+        i = i - 1
+        start = i * number_gist_on_page
+        end = start + number_gist_on_page
+        gists = Gist.query.filter(Gist.is_public).order_by(desc(Gist.created_at)).slice(start, end).all()
+    return gists
 
 
-def get_preview_from_code(code: str):
-    lines = code.split('\n')
-    if len(lines) > MAX_NUMBER_LINES_PREVIEW:
-        lines = lines[:MAX_NUMBER_LINES_PREVIEW]
-        lines.append('...')
-    return '\n'.join(map(
-        lambda line:
-        line if len(line) <= MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW
-        else line[:MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW - 3] + '...',
-        lines))
 
 
 if __name__ == '__main__':
