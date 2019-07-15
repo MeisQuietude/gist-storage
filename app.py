@@ -110,12 +110,15 @@ def _get_supported_language_by_ext(ext: str) -> str or None:
 @app.route('/discover/')
 @app.route('/discover/<int:page>')
 def discover(page=1):
+    _last_page = AdvancedTool.get_last_page_number(get_gists_by_page(0))
     info = {
-        "number_pages": AdvancedTool.get_number_pages(get_gists_by_page(0)),
+        "current_page": page,
+        "last_page": _last_page,
+        "page_numbers": AdvancedTool.get_page_numbers(page, _last_page),
         "get_preview": AdvancedTool.get_preview_from_code
     }
-    if page > info.get("number_pages", 0):
-        page = info.get("number_pages", 1)
+    if page > _last_page:
+        page = _last_page
         return redirect(url_for('discover', page=page))
 
     gists = get_gists_by_page(page)
