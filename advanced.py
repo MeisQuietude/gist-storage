@@ -24,9 +24,15 @@ class AdvancedTool:
     @staticmethod
     def get_page_numbers(i, last_page, count=COUNT_VIEW_PAGE_NUMBERS):
         numbers = []
+        if last_page <= 1:
+            return numbers
         if i > count:
             numbers.append('...')
         numbers = [*numbers, *[page for page in range(i - count, i + count + 1) if 1 < page < last_page]]
         if last_page - i > count:
             numbers.append('...')
         return numbers
+
+
+if __name__ == '__main__':
+    print(AdvancedTool.get_page_numbers(1, 1))
