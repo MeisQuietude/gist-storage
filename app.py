@@ -8,6 +8,7 @@ from sqlalchemy_utils import database_exists, create_database
 from werkzeug.datastructures import ImmutableMultiDict
 
 from advanced import AdvancedTool
+from upload_file import download_file_by_url
 from config import POSTGRES_DATABASE_URL, NUMBER_GISTS_ON_PAGE
 
 db = SQLAlchemy()
@@ -35,7 +36,7 @@ app = create_app()
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('gist/create.html')
+    return render_template('gist/create.html', download_file_by_url=download_file_by_url)
 
 
 @app.route('/post/gist', methods=['POST'])
@@ -125,6 +126,11 @@ def discover(page=1):
     return render_template('gist/list.html', info=info, gists=gists)
 
 
+@app.route('/api/file/<path:url>')
+def get_file_by_url_api(url):
+    return download_file_by_url(url)
+
+
 # @app.route('/api/gist/<id_>')
 def get_gist_api(id_=None) -> Gist or None:
     """
@@ -171,6 +177,10 @@ def get_gists_by_page(i: int = 0, number_gist_on_page: int = NUMBER_GISTS_ON_PAG
         end = start + number_gist_on_page
         gists = Gist.query.filter(Gist.is_public).order_by(desc(Gist.created_at)).slice(start, end).all()
     return gists
+
+
+with app.test_request_context():
+    print(url_for('get_file_by_url_api', url='https://raw.githubusercontent.com/odoo/odoo/12.0/odoo/modules/graph.py'))
 
 
 if __name__ == '__main__':
