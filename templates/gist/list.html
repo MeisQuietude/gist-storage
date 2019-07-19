@@ -28,7 +28,10 @@
                             <span>{{ gist.description }}</span>
                         </section>
                         <section>
-                            <section class="filename"><p>{{ gist.snippets[0].filename }}</p></section>
+                            <section class="snippet-title">
+                                file: <span class="filename">{{ gist.snippets[0].filename }}</span>,
+                                number of files: <span class="number_files">{{ gist.snippets|length }}</span>
+                            </section>
                             <section>
                                 <pre><code>{{ info.get("get_preview")(gist.snippets[0].code) }}</code></pre>
                             </section>
