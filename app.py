@@ -9,7 +9,7 @@ from werkzeug.datastructures import ImmutableMultiDict
 
 from advanced import AdvancedTool
 from upload_file import download_file_by_url
-from config import POSTGRES_DATABASE_URL, NUMBER_GISTS_ON_PAGE
+from config import POSTGRES_DATABASE_URL, NUMBER_GISTS_ON_PAGE, SUPPORTED_LANGUAGES
 
 db = SQLAlchemy()
 
@@ -24,12 +24,16 @@ def create_app():
         create_database(engine.url)
     with app.app_context():
         db.create_all()
+        for i in range(len(SUPPORTED_LANGUAGES)):
+            supp_language = list(SUPPORTED_LANGUAGES.keys())[i]
+            language_row = Language(supp_language)
+            db.session.add(language_row)
         db.session.commit()
 
     return app
 
 
-from model import Gist, Snippet
+from model import Gist, Snippet, Language
 
 app = create_app()
 
@@ -49,39 +53,33 @@ def post_gist():
     is_public: bool = bool(int(form.get('public', 0)))
 
     filenames: list = form.getlist('filename', str)
-    languages: list = []
-
-    for name in filenames:
-        # trying to get language name by file extension
-        _, ext = os.path.splitext(name)
-        lang = _get_supported_language_by_ext(ext)
-        languages.append(lang)
-
     code_snippets: list = form.getlist('code', str)
     try:
         assert len(code_snippets) > 0
-        assert len(code_snippets) == len(languages) == len(filenames)
+        assert len(code_snippets) == len(filenames)
     except AssertionError:
         return render_template('gist/create.html', error="Something get wrong...")
 
-    for i in range(len(code_snippets)):
+    languages: list = [0] * len(filenames)
+    for i in range(len(languages)):
+        language = None
+
+        # trying to get language name by file extension
+        _, ext = os.path.splitext(filenames[i])
+        language[i] = _get_supported_language_by_ext(ext)
+        if language[i]:
+            continue
+
         # trying to get language name by shebang
-        if languages[i] is not None: continue
-
-        snippet = code_snippets[i]
-        first_line = snippet.split('\n')[0]
-
-        pattern = re.compile(r"#! ?[/\S]+ ?[python]")  # shebang for python (it's only one supported and use shebang)
-        matched = pattern.match(first_line)
-
-        if matched is None: continue
-        languages[i] = "Python"
+        code_snippet = code_snippets[i]
+        first_line = code_snippet.split('\n')[0]
+        language[i] = _get_supported_language_by_shebang(first_line)
 
     gist = Gist(description, is_public)
 
     for i in range(len(filenames)):
-        snippet = Snippet(gist.id_, filenames[i], languages[i], code_snippets[i], i)
-        gist.snippets.append(snippet)
+        code_snippet = Snippet(gist.id_, filenames[i], languages[i], code_snippets[i])
+        gist.snippets.append(code_snippet)
 
     db.session.add(gist)
     db.session.commit()
@@ -97,15 +95,24 @@ def gist_description(link):
     return render_template('gist/description.html', gist=gist)
 
 
-def _get_supported_language_by_ext(ext: str) -> str or None:
-    """
-    Supported languages: JS, Python, C++, PHP, Java
-    """
-    lang = None
-    supported_exts = ('.js', '.py', '.cpp', '.myphp', '.java')
-    supported_langs = ('JavaScript', 'Python', 'C++', 'PHP', 'Java')
-    lang = dict(zip(supported_exts, supported_langs)).get(ext.lower(), None)
-    return lang
+def _get_supported_language_by_ext(ext: str) -> int or None:
+    ext = ext.lower()
+    for supp_lang, supp_ext in SUPPORTED_LANGUAGES.items():
+        if ext in supp_ext:
+            return list(SUPPORTED_LANGUAGES.keys()).index(supp_lang)
+    return 0
+
+
+def _get_supported_language_by_shebang(line: str) -> int:
+    pattern = re.compile(r"#!/(?:\S+/)+(\S+)")
+    matched = pattern.match(line)
+    if not matched: return 0
+
+    language = matched.group(1).lower()
+    for supp_language in SUPPORTED_LANGUAGES.keys():
+        if language == supp_language:
+            return list(SUPPORTED_LANGUAGES.keys()).index(language)
+    return 0
 
 
 @app.route('/discover/')
@@ -177,10 +184,6 @@ def get_gists_by_page(i: int = 0, number_gist_on_page: int = NUMBER_GISTS_ON_PAG
         end = start + number_gist_on_page
         gists = Gist.query.filter(Gist.is_public).order_by(desc(Gist.created_at)).slice(start, end).all()
     return gists
-
-
-with app.test_request_context():
-    print(url_for('get_file_by_url_api', url='https://raw.githubusercontent.com/odoo/odoo/12.0/odoo/modules/graph.py'))
 
 
 if __name__ == '__main__':
