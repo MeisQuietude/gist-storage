@@ -49,24 +49,41 @@ class Gist(db.Model):
 class Snippet(db.Model):
     id_ = db.Column(db.String(32), primary_key=True)
     filename = db.Column(db.String(80), nullable=False)
-    language = db.Column(db.String(80), nullable=True)
     code = db.Column(db.Text)
-    order = db.Column(db.Integer, default=0)
     gist_id = db.Column(db.String(32), db.ForeignKey('gist.id_'), nullable=False)
     gist = db.relationship('Gist', backref=db.backref('snippets', lazy=True))
+    language_id = db.Column(db.Integer, db.ForeignKey('language.id_'), default=1)
+    language = db.relationship('Language')
 
-    col_names = ('id_', 'gist_id', 'filename', 'language', 'code', 'order', 'gist')
+    col_names = ('id_', 'gist_id', 'filename', 'language_id', 'code', 'gist')
 
-    def __init__(self, gist_id, filename, language, code, order):
+    def __init__(self, gist_id, filename, language_id, code):
         self.id_ = _Tools.gen_id()
         self.gist_id = gist_id
         self.filename = filename
-        self.language = language
+        self.language_id = language_id
         self.code = code
-        self.order = order
 
     def __repr__(self):
         return f'Snippet {self.id_}'
 
     def get_col_names(self):
         return self.col_names
+
+
+class Language(db.Model):
+    id_ = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80))
+    i = -1  # autoincrement from zero to N
+
+    def __init__(self, name):
+        self.id_ = Language._gen_id()
+        self.name = name
+
+    def __repr__(self):
+        return f'Language {self.id_}'
+
+    @staticmethod
+    def _gen_id():
+        Language.i += 1
+        return Language.i
