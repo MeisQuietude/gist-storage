@@ -16,8 +16,11 @@
   color: white;
 }
 
-.filename > * {
+.snippet-title {
+  padding-left: 5px;
   text-align: left;
+}
+.snippet-title > .filename {
   font-style: italic;
 }
 
