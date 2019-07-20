@@ -14,6 +14,13 @@ class _Tools:
         return uuid.uuid4().hex
 
     @staticmethod
+    def autoincrement(start=1, increment=1):
+        i = start - increment
+        while True:
+            i += increment
+            yield i
+
+    @staticmethod
     def make_link(id_: str, is_public: bool):
         """
         Generate link by id
@@ -74,16 +81,11 @@ class Snippet(db.Model):
 class Language(db.Model):
     id_ = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    i = -1  # autoincrement from zero to N
+    autoincrement = _Tools.autoincrement(start=0)
 
     def __init__(self, name):
-        self.id_ = Language._gen_id()
+        self.id_ = next(Language.autoincrement)
         self.name = name
 
     def __repr__(self):
-        return f'Language {self.id_}'
-
-    @staticmethod
-    def _gen_id():
-        Language.i += 1
-        return Language.i
+        return self.name if self.name else 'unknown'
