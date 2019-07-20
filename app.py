@@ -2,7 +2,7 @@ import os
 import re
 from collections import defaultdict, OrderedDict
 
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine, desc
 from sqlalchemy_utils import database_exists, create_database
@@ -202,6 +202,11 @@ def get_gists_by_page(i: int = 0, number_gist_on_page: int = NUMBER_GISTS_ON_PAG
         end = start + number_gist_on_page
         gists = Gist.query.filter(Gist.is_public).order_by(desc(Gist.created_at)).slice(start, end).all()
     return gists
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'assets'), 'favicon.ico')
 
 
 if __name__ == '__main__':
