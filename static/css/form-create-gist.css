@@ -1,4 +1,4 @@
-input, textarea {
+input, button, textarea {
   margin-top: 4px;
 }
 
@@ -33,6 +33,10 @@ textarea {
 }
 .additional-ways-enter-code > input, .additional-ways-enter-code button, .form-action > input, .form-action button {
   flex-grow: 1;
+}
+
+.upload-file-btn {
+  display: none;
 }
 
 /*# sourceMappingURL=form-create-gist.css.map */
