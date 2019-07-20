@@ -35,10 +35,8 @@ class Gist(db.Model):
     id_ = db.Column(db.String(32), primary_key=True)
     description = db.Column(db.String(255), nullable=False)
     is_public = db.Column(db.Boolean)
-    link = db.Column(db.String(80), unique=True)
+    link = db.Column(db.String(24), unique=True)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-
-    col_names = ('id_', 'description', 'is_public', 'link', 'created_at')
 
     def __init__(self, description, is_public=False):
         self.description = description
@@ -49,20 +47,15 @@ class Gist(db.Model):
     def __repr__(self):
         return f'Gist {self.id_}'
 
-    def get_col_names(self):
-        return self.col_names
-
 
 class Snippet(db.Model):
     id_ = db.Column(db.String(32), primary_key=True)
     filename = db.Column(db.String(80), nullable=False)
-    code = db.Column(db.Text)
+    code = db.Column(db.Text, nullable=False)
     gist_id = db.Column(db.String(32), db.ForeignKey('gist.id_'), nullable=False)
     gist = db.relationship('Gist', backref=db.backref('snippets', lazy=True))
     language_id = db.Column(db.Integer, db.ForeignKey('language.id_'), default=1)
     language = db.relationship('Language')
-
-    col_names = ('id_', 'gist_id', 'filename', 'language_id', 'code', 'gist')
 
     def __init__(self, gist_id, filename, language_id, code):
         self.id_ = _Tools.gen_id()
@@ -74,17 +67,14 @@ class Snippet(db.Model):
     def __repr__(self):
         return f'Snippet {self.id_}'
 
-    def get_col_names(self):
-        return self.col_names
-
 
 class Language(db.Model):
     id_ = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    autoincrement = _Tools.autoincrement(start=0)
+    name = db.Column(db.String(50))
+    _autoincrement = _Tools.autoincrement(start=0)
 
     def __init__(self, name):
-        self.id_ = next(Language.autoincrement)
+        self.id_ = next(Language._autoincrement)
         self.name = name
 
     def __repr__(self):
