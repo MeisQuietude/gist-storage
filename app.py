@@ -58,6 +58,8 @@ def post_gist():
     try:
         assert len(code_snippets) > 0
         assert len(code_snippets) == len(filenames)
+        assert len(description) <= 255
+        assert len(filenames) <= 80
     except AssertionError:
         return render_template('gist/create.html', error="Something get wrong...")
 
