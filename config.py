@@ -5,7 +5,7 @@ SUPPORTED_LANGUAGES = {
     'python': {'.py'},
     'c++': {'.cpp'},
     'php': {'.myphp'},
-    'html': {'htm', 'html'}
+    'html': {'.htm', '.html'}
 }
 
 # Options
