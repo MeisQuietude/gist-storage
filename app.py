@@ -25,10 +25,8 @@ def create_app():
         create_database(engine.url)
         with app.app_context():
             db.create_all()
-            for i in range(len(SUPPORTED_LANGUAGES)):
-                supp_language = list(SUPPORTED_LANGUAGES.keys())[i]
-                language_row = Language(supp_language)
-                db.session.add(language_row)
+            for supported_language in SUPPORTED_LANGUAGES:
+                db.session.add(Language(supported_language))
             db.session.commit()
 
     return app
@@ -39,39 +37,38 @@ from model import Gist, Snippet, Language
 app = create_app()
 
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def index():
-    return render_template('gist/create.html', download_file_by_url=download_file_by_url)
+    return render_template('gist/create.html')
 
 
 @app.route('/post/gist', methods=['POST'])
 def post_gist():
+    errors = []
+
     form: ImmutableMultiDict = request.form
-
     description: str = form.get('description', '').strip()
-    if not description:
-        return render_template('gist/create.html', error="Gist's description can't be empty")
     is_public: bool = bool(int(form.get('public', 0)))
-
     filenames: list = form.getlist('filename', str)
     code_snippets: list = form.getlist('code', str)
-    try:
-        assert len(code_snippets) > 0
-        assert len(code_snippets) == len(filenames)
-        assert len(description) <= 255
-        assert len(filenames) <= 80
-    except AssertionError:
-        return render_template('gist/create.html', error="Something wrong... Checkout")
+
+    if not description or len(description) > 255:
+        errors.append(f'Length of description should be between 1 and {255}')
+    if not filenames or not all(0 < len(name) <= 80 for name in filenames):
+        errors.append(f'Length of filenames should be between 1 and {80}')
+    if not code_snippets or not all(code_snippets):
+        errors.append(f'Length of code should not be empty')
+
+    if errors:
+        return render_template('gist/create.html', error='. '.join(errors))
 
     languages: list = [0] * len(filenames)
     for i in range(len(languages)):
-        language = None
-
         # trying to get language name by file extension
         _, ext = os.path.splitext(filenames[i])
         languages[i] = _get_supported_language_by_ext(ext)
-        if languages[i]:
-            continue
+
+        if languages[i]: continue
 
         # trying to get language name by shebang
         code_snippet = code_snippets[i]
@@ -93,8 +90,8 @@ def post_gist():
 @app.route('/gist/<link>')
 def gist_description(link):
     gist = get_gist_api(link)
-    if gist is None or not Gist.query.filter(Gist.link == link).get(1):
-        return render_template('gist/description.html', error="gist not exists")
+    if gist is None or not Gist.query.filter(Gist.link == link).limit(1).all():
+        return render_template('gist/description.html', error="Gist not found")
     return render_template('gist/description.html', gist=gist)
 
 
