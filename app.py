@@ -61,7 +61,7 @@ def post_gist():
         assert len(description) <= 255
         assert len(filenames) <= 80
     except AssertionError:
-        return render_template('gist/create.html', error="Something get wrong...")
+        return render_template('gist/create.html', error="Something wrong... Checkout")
 
     languages: list = [0] * len(filenames)
     for i in range(len(languages)):
@@ -93,8 +93,8 @@ def post_gist():
 @app.route('/gist/<link>')
 def gist_description(link):
     gist = get_gist_api(link)
-    if gist is None:
-        return render_template('gist/description.html', error={"error": "gist not exists"})
+    if gist is None or not Gist.query.filter(Gist.link == link).get(1):
+        return render_template('gist/description.html', error="gist not exists")
     return render_template('gist/description.html', gist=gist)
 
 

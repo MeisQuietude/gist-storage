@@ -16,6 +16,12 @@
         <h1>Share your code</h1>
     </section>
 
+    {% if error %}
+        <section class="error">
+            {{ error }}
+        </section>
+    {% endif %}
+
     <form action="/post/gist" method="post">
 
         <input type="text" maxlength="255" id="description" name="description"
