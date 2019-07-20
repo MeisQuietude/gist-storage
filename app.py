@@ -1,5 +1,6 @@
 import os
 import re
+from collections import defaultdict, OrderedDict
 
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
@@ -115,6 +116,20 @@ def _get_supported_language_by_shebang(line: str) -> int:
     return 0
 
 
+def _get_snippet_statistic_by_language():
+    count = defaultdict(int)
+    for snippet in Snippet.query.all():
+        count[snippet.language] += 1
+
+    total_count = sum(count.values())
+    stats = OrderedDict(sorted(count.items(), key=lambda lang: lang[0].__repr__()))
+    for k in stats.keys():
+        # get a percent values
+        stats[k] = stats[k] / total_count
+
+    return stats
+
+
 @app.route('/discover/')
 @app.route('/discover/<int:page>')
 def discover(page=1):
@@ -123,7 +138,8 @@ def discover(page=1):
         "current_page": page,
         "last_page": _last_page,
         "page_numbers": AdvancedTool.get_page_numbers(page, _last_page),
-        "get_preview": AdvancedTool.get_preview_from_code
+        "get_preview": AdvancedTool.get_preview_from_code,
+        "language_statistic": _get_snippet_statistic_by_language()
     }
     if page > _last_page:
         page = _last_page
