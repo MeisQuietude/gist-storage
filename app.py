@@ -22,13 +22,13 @@ def create_app():
     engine = create_engine(POSTGRES_DATABASE_URL)
     if not database_exists(engine.url):
         create_database(engine.url)
-    with app.app_context():
-        db.create_all()
-        for i in range(len(SUPPORTED_LANGUAGES)):
-            supp_language = list(SUPPORTED_LANGUAGES.keys())[i]
-            language_row = Language(supp_language)
-            db.session.add(language_row)
-        db.session.commit()
+        with app.app_context():
+            db.create_all()
+            for i in range(len(SUPPORTED_LANGUAGES)):
+                supp_language = list(SUPPORTED_LANGUAGES.keys())[i]
+                language_row = Language(supp_language)
+                db.session.add(language_row)
+            db.session.commit()
 
     return app
 
@@ -66,14 +66,14 @@ def post_gist():
 
         # trying to get language name by file extension
         _, ext = os.path.splitext(filenames[i])
-        language[i] = _get_supported_language_by_ext(ext)
-        if language[i]:
+        languages[i] = _get_supported_language_by_ext(ext)
+        if languages[i]:
             continue
 
         # trying to get language name by shebang
         code_snippet = code_snippets[i]
         first_line = code_snippet.split('\n')[0]
-        language[i] = _get_supported_language_by_shebang(first_line)
+        languages[i] = _get_supported_language_by_shebang(first_line)
 
     gist = Gist(description, is_public)
 
