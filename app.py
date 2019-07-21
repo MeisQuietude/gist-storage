@@ -65,7 +65,7 @@ def discover(page=1):
         "last_page": _last_page,
         "page_numbers": AdvancedTool.get_page_numbers(page, _last_page),
         "get_preview": AdvancedTool.get_preview_from_code,
-        "language_statistic": _get_snippet_statistic_by_language()
+        "language_statistic": _get_snippet_statistic_by_languages()
     }
     if page > _last_page:
         page = _last_page
@@ -140,7 +140,7 @@ def _get_supported_language_by_shebang(line: str) -> int:
     return 0
 
 
-def _get_snippet_statistic_by_language():
+def _get_snippet_statistic_by_languages():
     count = defaultdict(int)
     for gist in Gist.query.filter(Gist.is_public):
         for snippet in gist.snippets:
@@ -180,11 +180,8 @@ def get_gist_api(id_=None) -> Gist or None:
             # Public link
             result = Gist.query.filter(Gist.id_.startswith(id_)).first()
         else:
-            result = None
-
-        assert result is not None
+            raise AssertionError
         return result
-
     except AssertionError:
         return None
 
