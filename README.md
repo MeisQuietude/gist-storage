@@ -11,3 +11,13 @@ The web application like gist.github.com, that is allowing you to store and shar
 - CSS
     - SASS
 - PostgreSQL 10
+
+### Installation
+1. prepare DBMS (Postgres)
+   + create a user which can login and create databases
+   + or
+   + change connection in config.py (variable POSTGRES_DATABASE_URL)
+2. clone project to virtual environment with `Python 3.x`
+3. run `pip install -r requirements.txt`
+4. run `flask run` for start application
+5. application running on `http://127.0.0.1:5000/`
