@@ -141,8 +141,9 @@ def _get_supported_language_by_shebang(line: str) -> int:
 
 def _get_snippet_statistic_by_language():
     count = defaultdict(int)
-    for snippet in Snippet.query.all():
-        count[snippet.language] += 1
+    for gist in Gist.query.filter(Gist.is_public):
+        for snippet in gist.snippets:
+            count[snippet.language] += 1
 
     total_count = sum(count.values())
     stats = OrderedDict(sorted(count.items(), key=lambda lang: lang[0].__repr__()))
