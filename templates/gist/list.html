@@ -21,9 +21,12 @@
         </section>
     {% else %}
         <section class="gists-wrap">
-            <section class="language-statistic">
+            <section class="statistic">
                 {% for language, percant in info.get('language_statistic').items() %}
-                    <span>{{ language }}: {{ (percant * 100) |round(1) }}%</span>
+                    <section class="statistic-element-wrap">
+                        <section class="statistic-language">{{ language }}</section>
+                        <section class="statistic-value">{{ (percant * 100) |round(1) }}%</section>
+                    </section>
                 {% endfor %}
             </section>
             <section class="gists">

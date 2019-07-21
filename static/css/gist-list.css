@@ -2,8 +2,14 @@
   margin-top: 25px;
 }
 
-.language-statistic {
+.statistic {
   display: flex;
+  justify-content: center;
+}
+.statistic > .statistic-element-wrap {
+  display: flex;
+  flex-direction: column;
+  margin: 0 1vw;
 }
 
 .description {
