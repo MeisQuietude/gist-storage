@@ -14,8 +14,8 @@ class SizeException(BaseException):
 
 def download_file_by_url(url: str, max_size: int = None, retry: int = 0):
     """
-    Скачивает файл по ссылке
-    :param url
+    Download file by link
+    :param url:
     :param max_size: ограничение на размер файла, смотрятся по заголовкам max_size
     :param retry: количество попыток получить 200 ответ от сервера retry
     :return: dict{filename : content}
