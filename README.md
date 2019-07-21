@@ -12,7 +12,7 @@ The web application like gist.github.com, that is allowing you to store and shar
     - SASS
 - PostgreSQL 10
 
-### Installation
+### How to start
 1. prepare DBMS (Postgres)
    + create a user which can login and create databases
    + or
