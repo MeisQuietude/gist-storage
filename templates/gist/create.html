@@ -16,9 +16,11 @@
         <h1>Share your code</h1>
     </section>
 
-    {% if error %}
-        <section class="error">
-            {{ error }}
+    {% if errors %}
+        <section class="errors">
+            {% for error in errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
         </section>
     {% endif %}
 

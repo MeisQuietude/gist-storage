@@ -52,7 +52,7 @@ def index():
 def gist_description(link):
     gist = get_gist_api(link)
     if gist is None or not Gist.query.filter(Gist.link == link).limit(1).all():
-        return render_template('gist/description.html', error="Gist not found")
+        return render_template('gist/description.html', errors=["Gist not found"])
     return render_template('gist/description.html', gist=gist)
 
 
@@ -93,7 +93,7 @@ def post_gist():
         errors.append(f'Length of code should not be empty')
 
     if errors:
-        return render_template('gist/create.html', error='. '.join(errors))
+        return render_template('gist/create.html', errors=errors)
 
     languages: list = [0] * len(filenames)
     for i in range(len(languages)):

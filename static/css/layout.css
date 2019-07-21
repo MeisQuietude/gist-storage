@@ -53,8 +53,9 @@ code {
   text-transform: uppercase;
 }
 
-.error {
-  padding: 5px;
+.errors {
+  text-align: left;
+  padding: 10px;
   border: 2px solid #000000;
   background-color: #892b2b;
   color: #ffffff;
