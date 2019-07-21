@@ -7,9 +7,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="/static/js/append_new_fragment_btn.js"></script>
-    <script src="../../static/js/upload-file.js"></script>
-    <script src="../../static/js/input_type-file_style_as_button.js"></script>
+    <script src="/static/js/gist_create_init.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -29,24 +27,7 @@
         <input type="text" maxlength="255" id="description" name="description"
                placeholder="Gist description..." required>
 
-        <section id="gists">
-
-            <section class="gist">
-                <input type="text" maxlength="80" class="filename" name="filename"
-                       placeholder="Filename including extension..." required>
-
-                <input type="button" class="delBtn" value="Delete this fragment">
-
-                <textarea name="code" class="codearea" required></textarea>
-
-                <section class="additional-ways-enter-code">
-                    <input type="button" id="upload-link" value="External link">
-                    <button type="button" class="upload-file-btn-wrap">Upload file</button>
-                    <input type="file" class="upload-file-btn" id="upload-file">
-                </section>
-            </section>
-
-        </section>
+        <section id="gists"></section>
 
         <section class="form-action">
             <input type="button" id="addBtn" value="Append new fragment">
