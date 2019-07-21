@@ -9,8 +9,8 @@ from sqlalchemy_utils import database_exists, create_database
 from werkzeug.datastructures import ImmutableMultiDict
 
 from advanced import AdvancedTool
-from upload_file import download_file_by_url
 from config import POSTGRES_DATABASE_URL, NUMBER_GISTS_ON_PAGE, SUPPORTED_LANGUAGES
+from upload_file import download_file_by_url
 
 db = SQLAlchemy()
 
@@ -37,9 +37,41 @@ from model import Gist, Snippet, Language
 app = create_app()
 
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'assets'), 'favicon.ico')
+
+
 @app.route('/')
 def index():
     return render_template('gist/create.html')
+
+
+@app.route('/gist/<link>')
+def gist_description(link):
+    gist = get_gist_api(link)
+    if gist is None or not Gist.query.filter(Gist.link == link).limit(1).all():
+        return render_template('gist/description.html', error="Gist not found")
+    return render_template('gist/description.html', gist=gist)
+
+
+@app.route('/discover/')
+@app.route('/discover/<int:page>')
+def discover(page=1):
+    _last_page = AdvancedTool.get_last_page_number(get_gists_by_page(0))
+    info = {
+        "current_page": page,
+        "last_page": _last_page,
+        "page_numbers": AdvancedTool.get_page_numbers(page, _last_page),
+        "get_preview": AdvancedTool.get_preview_from_code,
+        "language_statistic": _get_snippet_statistic_by_language()
+    }
+    if page > _last_page:
+        page = _last_page
+        return redirect(url_for('discover', page=page))
+
+    gists = get_gists_by_page(page)
+    return render_template('gist/list.html', info=info, gists=gists)
 
 
 @app.route('/post/gist', methods=['POST'])
@@ -87,15 +119,7 @@ def post_gist():
     return redirect(url_for('gist_description', link=gist.link))
 
 
-@app.route('/gist/<link>')
-def gist_description(link):
-    gist = get_gist_api(link)
-    if gist is None or not Gist.query.filter(Gist.link == link).limit(1).all():
-        return render_template('gist/description.html', error="Gist not found")
-    return render_template('gist/description.html', gist=gist)
-
-
-def _get_supported_language_by_ext(ext: str) -> int or None:
+def _get_supported_language_by_ext(ext: str) -> int:
     ext = ext.lower()
     for supp_lang, supp_ext in SUPPORTED_LANGUAGES.items():
         if ext in supp_ext:
@@ -129,25 +153,6 @@ def _get_snippet_statistic_by_language():
     return stats
 
 
-@app.route('/discover/')
-@app.route('/discover/<int:page>')
-def discover(page=1):
-    _last_page = AdvancedTool.get_last_page_number(get_gists_by_page(0))
-    info = {
-        "current_page": page,
-        "last_page": _last_page,
-        "page_numbers": AdvancedTool.get_page_numbers(page, _last_page),
-        "get_preview": AdvancedTool.get_preview_from_code,
-        "language_statistic": _get_snippet_statistic_by_language()
-    }
-    if page > _last_page:
-        page = _last_page
-        return redirect(url_for('discover', page=page))
-
-    gists = get_gists_by_page(page)
-    return render_template('gist/list.html', info=info, gists=gists)
-
-
 @app.route('/api/file/<path:url>')
 def get_file_by_url_api(url):
     return download_file_by_url(url)
@@ -176,7 +181,6 @@ def get_gist_api(id_=None) -> Gist or None:
             result = None
 
         assert result is not None
-
         return result
 
     except AssertionError:
@@ -199,11 +203,6 @@ def get_gists_by_page(i: int = 0, number_gist_on_page: int = NUMBER_GISTS_ON_PAG
         end = start + number_gist_on_page
         gists = Gist.query.filter(Gist.is_public).order_by(desc(Gist.created_at)).slice(start, end).all()
     return gists
-
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'assets'), 'favicon.ico')
 
 
 if __name__ == '__main__':
