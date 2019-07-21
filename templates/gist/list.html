@@ -30,7 +30,7 @@
                 {% for gist in gists %}
                     <section class="gist">
                         <section class="description">
-                            <span>{{ gist.description }}</span>
+                            <span><a href="/gist/{{ gist.link }}" class="link-light">{{ gist.description }}</a></span>
                         </section>
                         <section>
                             <section class="snippet-title">
@@ -41,10 +41,10 @@
                                 <pre><code>{{ info.get("get_preview")(gist.snippets[0].code) }}</code></pre>
                             </section>
                         </section>
-                        <section>
+                        <section class="snippet-bottom">
                             <p>{{ gist.created_at }}</p>
+                            <a href="/gist/{{ gist.link }}" class="link-dark">view</a>
                         </section>
-                        <section><a href="/gist/{{ gist.link }}">view</a></section>
                     </section>
                 {% endfor %}
             </section>
@@ -52,7 +52,7 @@
         <section class="page_numbers">
             <ul>
                 <li><a data-nav="prev">&#8249;</a></li>
-                <li><a href="/discover/1">1</a></li>
+                <li><a href="/discover/1" class="link-dark">1</a></li>
 
                 {% if info.get('last_page') > 1 %}
 
@@ -60,7 +60,7 @@
 
                         <li>
                             {% if i != "..." %}
-                                <a href="/discover/{{ i }}">{{ i }}</a>
+                                <a href="/discover/{{ i }}" class="link-dark">{{ i }}</a>
                             {% else %}
                                 <p>{{ i }}</p>
                             {% endif %}
@@ -68,12 +68,13 @@
 
                     {% endfor %}
 
-                    <li><a href="/discover/{{ info.get('last_page') }}" data-nav="last">{{ info.get('last_page') }}</a>
+                    <li><a href="/discover/{{ info.get('last_page') }}" class="link-dark"
+                           data-nav="last">{{ info.get('last_page') }}</a>
                     </li>
 
                 {% endif %}
 
-                <li><a data-nav="next">&#8250;</a></li>
+                <li><a data-nav="next" class="link-dark">&#8250;</a></li>
             </ul>
         </section>
     {% endif %}

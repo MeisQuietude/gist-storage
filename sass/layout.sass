@@ -7,6 +7,9 @@
   text-decoration: none
   list-style: none
 
+a
+  cursor: pointer
+
 body
   background-color: $background_color
   font-family: $font
@@ -52,3 +55,15 @@ code
   border: 2px solid #000000
   background-color: #892b2b
   color: #ffffff
+
+a, a:visited
+  &.link-light
+    color: #ffffff
+  &.link-dark
+    color: #000000
+
+a:hover
+  &.link-light
+    color: #ffffff
+  &.link-dark
+    color: #16616c

@@ -10,21 +10,17 @@ input {
   width: 100%;
 }
 
-input[type=button] {
-  height: 5vh;
+.gist {
+  display: flex;
+  flex-direction: column;
 }
 
-textarea {
+.codearea {
   text-align: left;
   resize: none;
   overflow: auto;
   white-space: nowrap;
   height: 40vh;
-}
-
-.gist {
-  display: flex;
-  flex-direction: column;
 }
 
 .additional-ways-enter-code, .form-action {
@@ -39,4 +35,4 @@ textarea {
   display: none;
 }
 
-/*# sourceMappingURL=form-create-gist.css.map */
+/*# sourceMappingURL=gist-create.css.map */

@@ -7,16 +7,21 @@ section.gist-access {
   margin-top: 5px;
 }
 
-.code {
-  text-align: left;
-  margin-top: 25px;
+section.snippets {
+  margin-bottom: 35px;
 }
-.code > section > .snippet {
+
+section.snippet {
   margin-top: 10px;
 }
 
-.snippets {
-  margin-bottom: 35px;
+.language {
+  text-transform: capitalize;
+}
+
+section.code {
+  text-align: left;
+  margin-top: 25px;
 }
 
 /*# sourceMappingURL=gist-description.css.map */

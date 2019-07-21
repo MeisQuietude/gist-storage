@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block title %}Create Gist{% endblock %}
+
 {% block links %}
-    <link rel="stylesheet" href="/static/css/form-create-gist.css">
+    <link rel="stylesheet" href="/static/css/gist-create.css">
 {% endblock %}
+
 {% block scripts %}
     <script src="/static/js/gist-create.js"></script>
     <script src="../../static/js/upload-file.js"></script>
@@ -35,7 +37,7 @@
 
                 <input type="button" class="delBtn" value="Delete this fragment">
 
-                <textarea name="code" required></textarea>
+                <textarea name="code" class="codearea" required></textarea>
 
                 <section class="additional-ways-enter-code">
                     <input type="button" id="upload-link" value="External link">

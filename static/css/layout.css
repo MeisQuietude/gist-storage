@@ -6,6 +6,10 @@
   list-style: none;
 }
 
+a {
+  cursor: pointer;
+}
+
 body {
   background-color: #b4b4ac;
   font-family: "Segoe UI", serif;
@@ -54,6 +58,20 @@ code {
   border: 2px solid #000000;
   background-color: #892b2b;
   color: #ffffff;
+}
+
+a.link-light, a:visited.link-light {
+  color: #ffffff;
+}
+a.link-dark, a:visited.link-dark {
+  color: #000000;
+}
+
+a:hover.link-light {
+  color: #ffffff;
+}
+a:hover.link-dark {
+  color: #16616c;
 }
 
 /*# sourceMappingURL=layout.css.map */
