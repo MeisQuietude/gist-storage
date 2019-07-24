@@ -55,6 +55,8 @@ window.onload = () => {
         setAttributes(codeArea, {
             class: 'codearea',
             name: 'code',
+            autocomplete: 'off',
+            spellcheck: false,
             required: true
         });
         setAttributes(actionSection, {
@@ -88,7 +90,7 @@ window.onload = () => {
             const file = uploadFileBtn.files[0];
             if (!file) return;
 
-            const maxFileSize = 1024 * 1024 * 2;  // 2 MB
+            const maxFileSize = 1024 * 64;  // 64 KB
             if (file.size > maxFileSize) {
                 return alert(`Max file size is ${maxFileSize / 1024} KB`);
             }
