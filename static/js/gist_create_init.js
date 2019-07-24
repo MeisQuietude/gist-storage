@@ -1,5 +1,6 @@
 window.onload = () => {
     const gists = document.querySelector('#gists');
+    const submitBtns = document.querySelectorAll('button[type=submit]');
 
     const addBtn = document.querySelector('#addBtn');
     addBtn.onclick = () => {
@@ -95,6 +96,12 @@ window.onload = () => {
             const reader = new FileReader();
 
             if (file.type.match(/text.*/)) {
+                reader.onloadstart = () => {
+                    submitBtns.forEach(btn => btn.setAttribute('disabled', '1'));
+                };
+                reader.onloadend = () => {
+                    submitBtns.forEach(btn => btn.removeAttribute('disabled'));
+                };
                 reader.onload = (event) => {
                     filename.value = file.name;
                     codeArea.innerHTML = event.target.result;
@@ -127,7 +134,9 @@ window.onload = () => {
             if (!url) return;
             if (!isValidURL(url)) return alert('URL is not valid!');
 
+            submitBtns.forEach(btn => btn.setAttribute('disabled', '1'));
             const response = await getRequest(url);
+            submitBtns.forEach(btn => btn.removeAttribute('disabled'));
 
             filename.value = response.filename;
             codeArea.innerHTML = response.content;
