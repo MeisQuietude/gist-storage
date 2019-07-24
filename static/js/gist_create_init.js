@@ -85,6 +85,13 @@ window.onload = () => {
 
         uploadFileBtn.addEventListener("change", () => {
             const file = uploadFileBtn.files[0];
+            if (!file) return;
+
+            const maxFileSize = 1024 * 1024 * 2;  // 2 MB
+            if (file.size > maxFileSize) {
+                return alert(`Max file size is ${maxFileSize / 1024} KB`);
+            }
+
             const reader = new FileReader();
 
             if (file.type.match(/text.*/)) {
@@ -93,7 +100,7 @@ window.onload = () => {
                     codeArea.innerHTML = event.target.result;
                 }
             } else {
-                alert("Unsupported file type! ");
+                return alert("Unsupported file type! ");
             }
 
             reader.readAsText(file);
@@ -117,6 +124,7 @@ window.onload = () => {
                     .test(url);
 
             const url = await prompt('Enter your url');
+            if (!url) return;
             if (!isValidURL(url)) return alert('URL is not valid!');
 
             const response = await getRequest(url);
