@@ -9,7 +9,7 @@ from sqlalchemy_utils import database_exists, create_database
 from werkzeug.datastructures import ImmutableMultiDict
 
 from advanced import AdvancedTool
-from config import NUMBER_GISTS_ON_PAGE, SUPPORTED_LANGUAGES, DevelopmentConfig
+from config import NUMBER_GISTS_ON_PAGE, SUPPORTED_LANGUAGES, DevelopmentConfig, MAX_SIZE_UPLOAD_CONTENT_BY_URL
 from upload_by_url import download_file_by_url
 
 db = SQLAlchemy()
@@ -156,7 +156,7 @@ def _get_snippet_statistic_by_languages():
 
 @app.route('/api/file/<path:url>')
 def get_file_by_url_api(url):
-    return download_file_by_url(url, max_size=1024*64)
+    return download_file_by_url(url, max_size=MAX_SIZE_UPLOAD_CONTENT_BY_URL)
 
 
 # @app.route('/api/gist/<id_>')

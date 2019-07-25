@@ -14,6 +14,8 @@ MAX_NUMBER_SYMBOLS_IN_LINE_PREVIEW = 80
 NUMBER_GISTS_ON_PAGE = 5
 COUNT_VIEW_PAGE_NUMBERS = 3  # +- from current page
 
+MAX_SIZE_UPLOAD_CONTENT_BY_URL = 1024 * 64  # 64kb
+
 
 class Config(object):
     DEBUG = False
