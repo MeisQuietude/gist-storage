@@ -28,10 +28,11 @@ def download_file_by_url(url: str, max_size: int = None, retry: int = 0):
     response = _wait_response(request_params, retry)
     if response.status_code != 200:
         raise DownloadException(response.content)
-    if max_size and not _check_size(url, max_size):
-        return SizeException(url)
+
     filename = url.split('/')[-1]
-    return json.dumps({'filename': filename, 'content': response.content.decode('utf-8')})
+    content = _process_content(response, max_size)
+
+    return json.dumps({'filename': filename, 'content': content})
 
 
 def _wait_response(request_params: dict, retry: int) -> requests.Response:
@@ -50,16 +51,18 @@ def _wait_response(request_params: dict, retry: int) -> requests.Response:
     return response
 
 
-def _check_size(url: str, max_size: int) -> bool:
+def _process_content(response: requests.Response, max_size: int) -> str:
     """
-    Checks headers for allowed size of content
-    :param url:
+    Checks content for allowed size and return it
+    :param response:
     :param max_size:
-    :return:
+    :return: content string
     """
-    h = requests.head(url)
-    header = h.headers
-    content_length = int(header.get('content-length', 0))
-    if content_length and content_length > max_size:
-        return False
-    return True
+    content = ''
+    for chunk in response.iter_content(1024, decode_unicode=True):
+        content += chunk
+        if len(content) > max_size:
+            response.close()
+            raise SizeException(f'File size is too large, {response.url}')
+
+    return content

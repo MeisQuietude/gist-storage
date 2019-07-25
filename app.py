@@ -156,7 +156,7 @@ def _get_snippet_statistic_by_languages():
 
 @app.route('/api/file/<path:url>')
 def get_file_by_url_api(url):
-    return download_file_by_url(url)
+    return download_file_by_url(url, max_size=1024*64)
 
 
 # @app.route('/api/gist/<id_>')
