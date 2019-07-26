@@ -3,13 +3,13 @@
 {% block title %}Discover{% endblock %}
 
 {% block links %}
-    <link rel="stylesheet" href="../../static/css/gist-list.css">
+    <link rel="stylesheet" href="../../static/assets/css/gist-list.css">
     <link rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
 {% endblock %}
 
 {% block scripts %}
-    <script src="../../static/js/gists_navigation_btns_prev-next.js"></script>
+    <script src="../../static/assets/js/gists_navigation_btns_prev-next.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 {% endblock %}
@@ -41,7 +41,7 @@
                                 number of files: <span class="number_files">{{ gist.snippets|length }}</span>
                             </section>
                             <section>
-                                <pre><code>{{ info.get("get_preview")(gist.snippets[0].code) }}</code></pre>
+                                <pre><code>{{ info.get("preview")(gist.snippets[0].code) }}</code></pre>
                             </section>
                         </section>
                         <section class="snippet-bottom">
@@ -59,7 +59,7 @@
 
                 {% if info.get('last_page') > 1 %}
 
-                    {% for i in info.get('page_numbers') %}
+                    {% for i in info.get('navigation_page_numbers') %}
 
                         <li>
                             {% if i != "..." %}
