@@ -12,7 +12,7 @@ class SizeException(BaseException):
     pass
 
 
-def download_file_by_url(url: str, max_size: int = None, retry: int = 0):
+def get_file(url: str, max_size: int = None, retry: int = 0):
     """
     Download file by link
     :param url:
