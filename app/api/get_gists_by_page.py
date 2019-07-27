@@ -4,9 +4,9 @@ from config import NUMBER_GISTS_ON_PAGE
 from app.models.gist import Gist
 
 
-def get_gists_by_page(i: int = 0, number_gist_on_page: int = NUMBER_GISTS_ON_PAGE) -> list:
+def get_gists_by_page(i: int = 1, number_gist_on_page: int = NUMBER_GISTS_ON_PAGE) -> list:
     """
-    :param i: number of page: 1 to N (0 for all)
+    :param i: number of page: 1 to N
     :param number_gist_on_page: maximum gists by page
     :return: list or None
     """
