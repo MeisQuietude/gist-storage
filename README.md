@@ -14,7 +14,7 @@ The web application like gist.github.com, that is allowing you to store and shar
 
 ### How to start
 1. prepare DBMS (Postgres)
-   + create a user which can login and create databases (root:toor)
+   + create a user which can login and create databases (gist:gist)
    + or
    + change connection in config.py (variable POSTGRES_DATABASE_URL)
 2. clone project to virtual environment with `Python 3.x`
