@@ -4,6 +4,11 @@ from config import SUPPORTED_LANGUAGES
 
 
 def guess_language_by_shebang(line: str) -> int:
+    """
+    Try to get language id by code shebang
+    :param line: first line of code (where could be shebang)
+    :return: language_id
+    """
     pattern = re.compile(r"#!/(?:\S+/)+(\S+)")
     matched = pattern.match(line)
     if not matched: return 0
