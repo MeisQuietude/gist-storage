@@ -9,7 +9,7 @@ from app.api.get_language_statistic import get_language_statistic
 
 
 def gist_discover(page):
-    _last_page = count_pages(get_gists_by_page(0))
+    _last_page = count_pages()
     info = {
         "current_page": page,
         "last_page": _last_page,
@@ -18,8 +18,8 @@ def gist_discover(page):
         "language_statistic": get_language_statistic()
     }
     if page > _last_page:
-        page = _last_page
-        return redirect(url_for('gist_discover_route', page=page))
+        # if user try go to page > last allowed page
+        return redirect(url_for('gist_discover_route', page=_last_page))
 
     gists = get_gists_by_page(page)
     return render_template('gist/list.html', info=info, gists=gists)
