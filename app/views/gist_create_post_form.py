@@ -3,9 +3,9 @@ import os
 from flask import request, render_template, redirect, url_for
 from werkzeug.datastructures import ImmutableMultiDict
 
+from app import db
 from app.api.guess_language_by_extension import guess_language_by_extension
 from app.api.guess_language_by_shebang import guess_language_by_shebang
-from app import db
 from app.models.gist import Gist
 from app.models.snippet import Snippet
 

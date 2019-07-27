@@ -1,38 +1,39 @@
 input, button, textarea {
-  margin-top: 4px;
+    margin-top: 4px;
 }
 
 input {
-  height: 5vh;
+    height: 5vh;
 }
 
 #description {
-  width: 100%;
+    width: 100%;
 }
 
 .gist {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .codearea {
-  text-align: left;
-  resize: none;
-  overflow: auto;
-  white-space: pre-wrap;
-  height: 40vh;
+    text-align: left;
+    resize: none;
+    overflow: auto;
+    white-space: pre-wrap;
+    height: 40vh;
 }
 
 .additional-ways-enter-code, .form-action {
-  display: flex;
-  margin-bottom: 15px;
+    display: flex;
+    margin-bottom: 15px;
 }
+
 .additional-ways-enter-code > input, .additional-ways-enter-code button, .form-action > input, .form-action button {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .upload-file-btn {
-  display: none;
+    display: none;
 }
 
 /*# sourceMappingURL=gist-create.css.map */

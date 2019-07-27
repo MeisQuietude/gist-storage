@@ -1,5 +1,5 @@
-from ._get_file_by_url import get_file
 from config import MAX_SIZE_UPLOAD_CONTENT_BY_URL
+from ._get_file_by_url import get_file
 
 
 def get_file_by_url(url):

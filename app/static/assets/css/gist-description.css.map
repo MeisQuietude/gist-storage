@@ -1,1 +1,10 @@
-{"version":3,"sourceRoot":"","sources":["../../sass/gist-description.sass"],"names":[],"mappings":"AAEA;EACE;EACA;;;AAEF;EACE;;;AAEF;EACE;;;AAEF;EACE;;;AAIF;EACE;;;AAEF;EACE;EACA","file":"gist-description.css"}
+{
+  "version": 3,
+  "sourceRoot": "",
+  "sources": [
+    "../../sass/gist-description.sass"
+  ],
+  "names": [],
+  "mappings": "AAEA;EACE;EACA;;;AAEF;EACE;;;AAEF;EACE;;;AAEF;EACE;;;AAIF;EACE;;;AAEF;EACE;EACA",
+  "file": "gist-description.css"
+}

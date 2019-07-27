@@ -2,8 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import create_database, database_exists
 
 from app import app, db
-from config import DevelopmentConfig, SUPPORTED_LANGUAGES
 from app.models.language import Language
+from config import DevelopmentConfig, SUPPORTED_LANGUAGES
 
 
 def create_itself():

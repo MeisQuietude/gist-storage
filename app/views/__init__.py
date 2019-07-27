@@ -1,13 +1,11 @@
 from app import app
-
 from app.api.get_file_by_url import get_file_by_url
-
 from .favicon import favicon
-from .index import index
 from .gist_create import create_gist
 from .gist_create_post_form import gist_create_post_form
 from .gist_description import gist_description
 from .gist_discover import gist_discover
+from .index import index
 
 
 @app.route('/favicon.ico')

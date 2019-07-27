@@ -1,27 +1,27 @@
 section.description {
-  margin-top: 15px;
-  margin-bottom: 0;
+    margin-top: 15px;
+    margin-bottom: 0;
 }
 
 section.gist-access {
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 section.snippets {
-  margin-bottom: 35px;
+    margin-bottom: 35px;
 }
 
 section.snippet {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .language {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 section.code {
-  text-align: left;
-  margin-top: 25px;
+    text-align: left;
+    margin-top: 25px;
 }
 
 /*# sourceMappingURL=gist-description.css.map */

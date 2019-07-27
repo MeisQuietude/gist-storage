@@ -1,7 +1,7 @@
 from sqlalchemy import desc
 
-from config import NUMBER_GISTS_ON_PAGE
 from app.models.gist import Gist
+from config import NUMBER_GISTS_ON_PAGE
 
 
 def get_gists_by_page(i: int = 1, number_gist_on_page: int = NUMBER_GISTS_ON_PAGE) -> list:
