@@ -4,12 +4,12 @@ from app.models.gist import Gist
 
 
 def get_language_statistic():
-    count = defaultdict(int)
+    count = defaultdict(int)  # dictionary {'language': default(0)}
     for gist in Gist.query.filter(Gist.is_public):
         for snippet in gist.snippets:
             count[snippet.language] += 1
 
-    total_count = sum(count.values())
+    total_count = sum(count.values())  # count all snippets
     stats = OrderedDict(sorted(count.items(), key=lambda lang: lang[0].__repr__()))
     for k in stats.keys():
         # get a percent values
