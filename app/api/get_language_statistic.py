@@ -1,6 +1,6 @@
 from collections import defaultdict, OrderedDict
 
-from app.models.gist import Gist
+from app.api.get_all_gists import get_all_gists
 
 
 def get_language_statistic():
@@ -9,7 +9,7 @@ def get_language_statistic():
     :return: sorted by language names dictionary with fractional values
     """
     count = defaultdict(int)  # dictionary {'language': default(0)}
-    for gist in Gist.query.filter(Gist.is_public):
+    for gist in get_all_gists():
         for snippet in gist.snippets:
             count[snippet.language] += 1
 
