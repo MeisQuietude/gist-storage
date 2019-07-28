@@ -55,7 +55,7 @@
         <section class="page_numbers">
             <ul>
                 <li><a data-nav="prev">&#8249;</a></li>
-                <li><a href="/discover/1" class="link-dark">1</a></li>
+                <li><a href="{{ url_for('gist_discover_route', page=1) }}" class="link-dark">1</a></li>
 
                 {% if info.get('last_page') > 1 %}
 
@@ -63,7 +63,7 @@
 
                         <li>
                             {% if i != "..." %}
-                                <a href="/discover/{{ i }}" class="link-dark">{{ i }}</a>
+                                <a href="{{ url_for('gist_discover_route', page=i) }}" class="link-dark">{{ i }}</a>
                             {% else %}
                                 <p>{{ i }}</p>
                             {% endif %}
@@ -71,7 +71,7 @@
 
                     {% endfor %}
 
-                    <li><a href="/discover/{{ info.get('last_page') }}" class="link-dark"
+                    <li><a href="{{ url_for('gist_discover_route', page=info.get('last_page')) }}" class="link-dark"
                            data-nav="last">{{ info.get('last_page') }}</a>
                     </li>
 
