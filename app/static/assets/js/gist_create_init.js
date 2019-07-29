@@ -136,12 +136,14 @@ window.onload = () => {
             if (!url) return;
             if (!isValidURL(url)) return alert('URL is not valid!');
 
-            submitBtns.forEach(btn => btn.setAttribute('disabled', '1'));
-            const response = await getRequest(url);
-            submitBtns.forEach(btn => btn.removeAttribute('disabled'));
+            await submitBtns.forEach(btn => btn.setAttribute('disabled', '1'));
 
+            const response = await getRequest(url);
             filename.value = response.filename;
             codeArea.innerHTML = response.content;
+
+            await submitBtns.forEach(btn => btn.removeAttribute('disabled'));
+
         });
 
         delBtn.addEventListener("click", () => {
